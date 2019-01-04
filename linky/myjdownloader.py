@@ -7,6 +7,20 @@ class Jdownloader:
         self.l = links
         self.c = config
 
+    def check_config(self):
+        self.check_email_format()
+        self.check_device_id_validity()
+        self.check_password_exists()
+
+    def check_email_format(self):
+        pass
+
+    def check_password_exists(self):
+        pass
+
+    def check_device_id_validity(self):
+        pass
+
     def send_to_jdownloader(self):
         email = self.c['jdownloader']['email']
         password = self.c['jdownloader']['password']
