@@ -10,6 +10,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        linky=linky.scripts.linky:linky
+        linky=linky.linky:linky
     ''',
 )
