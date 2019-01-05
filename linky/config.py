@@ -1,6 +1,6 @@
 import configparser
 import sys
-from pathlib import Path
+from os.path import abspath
 
 
 class ConfigParser:
@@ -13,14 +13,9 @@ class ConfigParser:
         self.supported_clients = ['jdownloader', 'pyload']
         self.download_client = None
 
-    def get_abs_path(self):
-        config_file = Path(self.c)
-        abs_path = str(config_file.resolve())
-        return abs_path
-
     def get_config_dict(self):
         config = configparser.ConfigParser()
-        config.read(self.get_abs_path())
+        config.read(abspath(self.c))
         for section in config.sections():
             self.dict[section] = {}
             for key, val in config.items(section):
@@ -29,7 +24,7 @@ class ConfigParser:
 
     def get_sections_list(self):
         config = configparser.ConfigParser()
-        config.read(self.get_abs_path())
+        config.read(abspath(self.c))
         for section in config.sections():
             self.list.append(section)
         return self.list

@@ -2,3 +2,4 @@ myjdapi
 click
 configparser
 requests
+bs4
