@@ -11,3 +11,4 @@ def linky(links, config, downloader):
     config_dict = config.get_config_dict()
     """
 
+# $ linky --search "rick and morty s03e01" (--indexer/-i orion|--all-indexers/-a) --config linky.conf --downloader jdownloader (--print)
