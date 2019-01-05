@@ -1,4 +1,5 @@
-import configparser, sys
+import configparser
+import sys
 from pathlib import Path
 
 
@@ -48,7 +49,7 @@ class ConfigParser:
         non_default_downloaders = 0
 
         if len(sections) == 1:
-            print('WARNING: Using ' + str(sections[0]).capitalize() + ' as your download client since it is the only one configured.')
+            print('WARNING: Skipping searching for defaults and using ' + str(sections[0]).capitalize() + ' as your download client since it is the only one configured.')
             default_client = str(sections[0]).lower()
             return default_client
         elif len(sections) == 0:
@@ -77,3 +78,6 @@ class ConfigParser:
                 else:
                     print('ERROR: Something went horribly wrong when looking in your linky.conf!')
                     sys.exit(1)
+
+    def find_indexer_config(self):
+        pass
