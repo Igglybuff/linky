@@ -8,72 +8,86 @@ class ConfigParser:
     def __init__(self, config):
         self.c = abspath(config)
         self.dict = {}
-        self.supported_clients = ['jdownloader', 'pyload']
+        self.supported_items = {
+            'client': ['jdownloader', 'pyload'],
+            'indexer': ['fmovies'],
+        }
 
     def get_config_dict(self):
         config = configparser.ConfigParser()
         config.read(self.c)
+
         for section in config.sections():
             self.dict[section] = {}
             for key, val in config.items(section):
                 self.dict[section][key] = val
         return self.dict
 
-    def get_sections(self):
+    def get_sections(self, section_type='all'):
         sections_list = []
         config = configparser.ConfigParser()
         config.read(self.c)
+
+        if section_type == 'all':
+            prefix = ''
+        else:
+            prefix = section_type
+
         for section in config.sections():
-            sections_list.append(section)
+            if section.startswith(prefix):
+                sections_list.append(section[len(prefix + ' '):])
+
         return sections_list
 
     def get_client(self, downloader):
         if downloader:
             downloader = str(downloader).lower()
-            if str(downloader).lower() in self.supported_clients:
+            if str(downloader).lower() in self.supported_items['client']:
                 return downloader
             else:
                 print('ERROR: Provided download client is not supported.')
                 exit(1)
         else:
-            download_client = self.find_client_config()
+            download_client = self.find_default_config('client')
             return download_client
 
-    def find_client_config(self):
-        sections = self.get_sections()
+    def find_default_config(self, section_type):
+        sections = self.get_sections(section_type)
         config = self.get_config_dict()
-        non_default_downloaders = 0
+        non_defaults = 0
 
         if len(sections) == 1:
-            # TODO: this will fail unless sections are prefixed
-            print('WARNING: Skipping searching for defaults and using ' + str(sections[0]).capitalize() + ' as your download client since it is the only one configured.')
-            default_client = str(sections[0]).lower()
-            return default_client
+            print('WARNING: Skipping searching for defaults and using ' + str(sections[0]).capitalize() + ' as your ' +
+                  section_type + ' since it is the only one configured.')
+            default = str(sections[0]).lower()
+            return default
         elif len(sections) == 0:
-            print('ERROR: There were no supported download clients specified in ' + self.c)
+            print('ERROR: There were no ' + section_type + 's specified in ' + self.c)
             exit(1)
 
         for section in sections:
-            if section in self.supported_clients:
+            if section in self.supported_items[section_type]:
                 print('INFO: ' + 'Found ' + section + ' in ' + self.c)
                 if config[section]['default']:
                     default_flag = str(config[section]['default']).lower()
                     if default_flag == 'true':
-                        print('INFO: ' + section + ' is set as the default download client!')
-                        default_client = str(section)
-                        return default_client
+                        print('INFO: ' + section + ' is set as the default ' + section_type + '!')
+                        default = section
+                        return default
                     else:
-                        print('ERROR: Found a "default = " line in your linky.conf but it is not set to "true".')
+                        print('ERROR: Found a "default = " line in ' + self.c + ' but it is not set to "true".')
                         exit(1)
                 else:
-                    non_default_downloaders += 1
-                    print('WARNING: Found "' + section + '", a supported download client, but it is not set to default. Looking for more configured download clients...')
+                    non_defaults += 1
+                    print('WARNING: Found "' + section + '", a supported ' + section_type +
+                          ', but it is not set to default. Looking for additional ' + section_type + 's...')
             else:
-                if non_default_downloaders > 1:
-                    print('ERROR: At least one download client was found in your configuration, but no default was set!')
+                if non_defaults > 1:
+                    print('ERROR: At least one ' + section_type +
+                          ' was found in your configuration, but no default was set!')
                     exit(1)
                 else:
-                    print('ERROR: Something went horribly wrong when looking in your linky.conf!')
+                    print('ERROR: Something went horribly wrong when reading ' + self.c + '!')
                     exit(1)
 
     def get_indexers(self, indexers):

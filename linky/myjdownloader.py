@@ -6,9 +6,9 @@ class Jdownloader:
     def __init__(self, links, config):
         self.l = links
         self.c = config
-        self.email = self.c['jdownloader']['email']
-        self.password = self.c['jdownloader']['password']
-        self.device_id = self.c['jdownloader']['device_id']
+        self.email = self.c['client jdownloader']['email']
+        self.password = self.c['client jdownloader']['password']
+        self.device_id = self.c['client jdownloader']['device_id']
 
     def check_config(self):
         self.check_email_format()
