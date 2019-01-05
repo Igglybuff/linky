@@ -5,17 +5,15 @@ from os.path import abspath
 
 class ConfigParser:
 
-    def __init__(self, config, downloader):
-        self.c = config
+    def __init__(self, config):
+        self.c = abspath(config)
         self.dict = {}
         self.list = []
-        self.downloader = downloader
         self.supported_clients = ['jdownloader', 'pyload']
-        self.download_client = None
 
     def get_config_dict(self):
         config = configparser.ConfigParser()
-        config.read(abspath(self.c))
+        config.read(self.c)
         for section in config.sections():
             self.dict[section] = {}
             for key, val in config.items(section):
@@ -24,19 +22,22 @@ class ConfigParser:
 
     def get_sections_list(self):
         config = configparser.ConfigParser()
-        config.read(abspath(self.c))
+        config.read(self.c)
         for section in config.sections():
             self.list.append(section)
         return self.list
 
-    def set_client(self):
-        if str(self.downloader):
-            self.download_client = self.find_client_config()
-        elif str(self.downloader).lower() in self.supported_clients:
-            self.download_client = self.downloader
+    def get_client(self, downloader):
+        if downloader:
+            downloader = str(downloader).lower()
+            if str(downloader).lower() in self.supported_clients:
+                return downloader
+            else:
+                print('ERROR: Provided download client is not supported.')
+                sys.exit(1)
         else:
-            print('ERROR: No supported download clients specified.')
-        return self.download_client
+            download_client = self.find_client_config()
+            return download_client
 
     def find_client_config(self):
         sections = self.get_sections_list()
@@ -48,12 +49,12 @@ class ConfigParser:
             default_client = str(sections[0]).lower()
             return default_client
         elif len(sections) == 0:
-            print('ERROR: There were no supported download clients specified in your linky.conf!')
+            print('ERROR: There were no supported download clients specified in ' + self.c)
             sys.exit(1)
 
         for section in sections:
             if section in self.supported_clients:
-                print('INFO: ' + 'Found ' + section + ' in linky.conf.')
+                print('INFO: ' + 'Found ' + section + ' in ' + self.c)
                 if config[section]['default']:
                     default_flag = str(config[section]['default']).lower()
                     if default_flag == 'true':
@@ -74,5 +75,5 @@ class ConfigParser:
                     print('ERROR: Something went horribly wrong when looking in your linky.conf!')
                     sys.exit(1)
 
-    def find_indexer_config(self):
+    def get_indexer(self, indexer):
         pass

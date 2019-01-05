@@ -25,4 +25,4 @@ class LinkPusher:
         jd.send_to_jdownloader()
 
     def push_to_pyload(self):
-        pass
+        print('ERROR: pyLoad is not supported yet.')

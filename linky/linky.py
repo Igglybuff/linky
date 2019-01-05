@@ -2,7 +2,7 @@ import click
 from os.path import expanduser
 from .linkpush import LinkPusher
 from .config import ConfigParser
-
+from .indexsearch import IndexerSearcher
 
 @click.group()
 @click.option('-c', '--config', 'config',
@@ -21,10 +21,10 @@ def linky(ctx, config):
 @click.option('-d', '--downloader', 'downloader', envvar='LINKY_DOWNLOADER', default=None, help='The name of the download manager you want to use from your configuration file.')
 @click.pass_context
 def push(ctx, links, downloader):
-    parser = ConfigParser(ctx.obj['CONFIG'], downloader)
+    parser = ConfigParser(ctx.obj['CONFIG'])
     config = parser.get_config_dict()
-    downloader = parser.set_client()
-    pusher = LinkPusher(links, config, downloader)
+    download_client = parser.get_client(downloader)
+    pusher = LinkPusher(links, config, download_client)
     pusher.push_link()
 
 
@@ -33,5 +33,9 @@ def push(ctx, links, downloader):
 @click.option('-q', '--query', 'query', required=True, help='Search terms you would like to query, e.g. "Deadpool"')
 @click.pass_context
 def search(ctx, indexer, query):
-    pass
+    parser = ConfigParser(ctx.obj['CONFIG'])
+    config = parser.get_config_dict()
+    indexer = parser.get_indexer(indexer)
+    searcher = IndexerSearcher(config)
+    searcher.search(query, indexer)
 
