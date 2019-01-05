@@ -4,6 +4,7 @@ from .linkpush import LinkPusher
 from .config import ConfigParser
 from .indexsearch import IndexerSearcher
 
+
 @click.group()
 @click.option('-c', '--config', 'config',
               envvar='LINKY_CONFIG_PATH', required=True,
@@ -32,10 +33,9 @@ def push(ctx, links, downloader):
 @click.option('-i', '--indexer/--indexers', 'indexers', envvar='LINKY_INDEXERS', required=False, default=None, help='One or more indexers to search.')
 @click.option('-q', '--query', 'query', required=True, help='Search terms you would like to query, e.g. "Deadpool"')
 @click.pass_context
-def search(ctx, indexer, query):
+def search(ctx, indexers, query):
     parser = ConfigParser(ctx.obj['CONFIG'])
     config = parser.get_config_dict()
-    indexer = parser.get_indexer(indexer)
+    indexer = parser.get_indexers(indexers)
     searcher = IndexerSearcher(config)
     searcher.search(query, indexer)
-

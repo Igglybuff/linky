@@ -1,3 +1,4 @@
+from sys import exit
 from .myjdownloader import Jdownloader
 
 
@@ -17,7 +18,7 @@ class LinkPusher:
             self.push_to_pyload()
         else:
             print('ERROR: Something went wrong pushing the link to your download client.')
-            sys.exit(1)
+            exit(1)
 
     def push_to_jdownloader(self):
         jd = Jdownloader(self.links, self.config)
