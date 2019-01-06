@@ -3,3 +3,4 @@ click
 configparser
 requests
 bs4
+urllib

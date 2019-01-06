@@ -16,4 +16,5 @@ class IndexerSearcher:
 
     def search_fmovies(self, query):
         fm = Fmovies(self.config)
-        fm.search_query(query)
+        url = fm.search(query)
+        print(url)

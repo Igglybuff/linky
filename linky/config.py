@@ -95,6 +95,3 @@ class ConfigParser:
             indexers = 'fmovies'
         indexers = indexers.lower()
         return indexers
-
-    def find_indexer_config(self):
-        pass
