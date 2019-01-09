@@ -92,6 +92,6 @@ class ConfigParser:
 
     def get_indexers(self, indexers):
         if not indexers:
-            indexers = 'fmovies'
+            indexers = 'orion'
         indexers = indexers.lower()
         return indexers

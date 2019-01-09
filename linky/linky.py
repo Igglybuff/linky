@@ -32,7 +32,7 @@ def push(ctx, links, downloader):
 
 
 @linky.command()
-@click.option('-i', '--indexer/--indexers', 'indexers', envvar='LINKY_INDEXERS',
+@click.option('-i', '--indexer', 'indexers', envvar='LINKY_INDEXERS',
               required=False, default=None, help='One or more indexers to search.')
 @click.option('-q', '--query', 'query', required=True, help='Search terms you would like to query, e.g. "Deadpool"')
 @click.pass_context
