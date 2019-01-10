@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib3 import disable_warnings
-# from selenium import webdriver
 
 
 class Fmovies:
