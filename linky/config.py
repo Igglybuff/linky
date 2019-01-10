@@ -10,7 +10,7 @@ class ConfigParser:
         self.dict = {}
         self.supported_items = {
             'client': ['jdownloader', 'pyload'],
-            'indexer': ['fmovies'],
+            'indexer': ['fmovies', 'orion', 'cinebloom'],
         }
 
     def get_config_dict(self):
@@ -91,7 +91,13 @@ class ConfigParser:
                     exit(1)
 
     def get_indexers(self, indexers):
-        if not indexers:
-            indexers = 'orion'
-        indexers = indexers.lower()
-        return indexers
+        if indexers:
+            indexers = indexers.lower()
+            if indexers.lower() in self.supported_items['indexer']:
+                return indexers
+            else:
+                print('ERROR: Provided indexer is not supported.')
+                exit(1)
+        else:
+            indexer = self.find_default_config('indexer')
+            return indexer
