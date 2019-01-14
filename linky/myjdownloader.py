@@ -1,4 +1,5 @@
 import myjdapi
+import json
 
 
 class Jdownloader:
@@ -27,11 +28,21 @@ class Jdownloader:
         # print('Jdownloader device_id: ' + self.device_id)
         pass
 
-    def send_to_jdownloader(self):
-        print('INFO: ' + 'Connecting to my.jdownloader.org...')
+    def connect(self):
+        print('INFO: Connecting to my.jdownloader.org...')
         jd = myjdapi.Myjdapi()
         jd.connect(self.email, self.password)
-        print('INFO: ' + 'Connected!')
-        print('INFO: ' + 'Sending URL to JDownloader...')
-        jd.get_device(device_id=self.device_id).linkgrabber.add_links([{"autostart": True, "links": self.l, "packageName": "TEST"}])
-        print('INFO: ' + 'Your link was sent to JDownloader successfully!')
+        print('INFO: Connected!')
+        return jd
+
+    def send_to_jdownloader(self):
+        jd = self.connect()
+        print('INFO: Sending URL to JDownloader...')
+        jd.get_device(device_id=self.device_id).linkgrabber.add_links([{"autostart": True, "links": self.l}])
+        print('INFO: Your link was sent to JDownloader successfully!')
+
+    def check_link_status(self, link=None):
+        jd = self.connect()
+        print('INFO: Fetching link(s) status...')
+        link_status = jd.get_device(device_id=self.device_id).downloads.query_packages()
+        print(json.dumps(link_status, indent=4, sort_keys=True))

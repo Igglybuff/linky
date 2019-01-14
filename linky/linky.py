@@ -50,12 +50,14 @@ def search(ctx, indexers, query):
               help='The name of the download manager you want to use from your configuration file.')
 @click.option('-l', '--links', 'links', envvar='LINKY_LINKS', default=None,
               help='URLs to files you have sent to your download manager.')
-@click.option('-a', '--all', 'all_items', default=None,
+@click.option('-a', '--all', 'all_items', default=False,
               help='Get the status for all items in your download manager\' queue.')
+@click.option('-s', '--silence', 'silence', default=False,
+              help='Disable log/info output.')
 @click.pass_context
-def status(ctx, downloader, links, all_items):
+def status(ctx, downloader, links, all_items, silence):
     parser = ConfigParser(ctx.obj['CONFIG'])
     config = parser.get_config_dict()
     download_client = parser.get_client(downloader)
-    status_checker = StatusChecker(config, download_client)
+    status_checker = StatusChecker(config, download_client, silence)
     status = status_checker.get_status(links, all_items)
