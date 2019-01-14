@@ -2,3 +2,4 @@
 venv/
 linky.conf
 linky.egg-info/
+linky/*.pyc
