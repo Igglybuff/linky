@@ -2,7 +2,7 @@
 
 `linky` is a work-in-progress command-line tool which can search the internet for movies and TV shows hosted on 1-click hosting websites like OpenLoad, Streamango, RapidVideo, and more (full list of supported hosters coming soon).
 
-`linky` integrates tightly with [JDownloader](http://jdownloader.org/) and can send any URL to a JDownloader "device" via the my.jdownloader.org API. There are plans to also integrate with [pyLoad](https://pyload.net/) soon.
+`linky` integrates tightly with [JDownloader](http://jdownloader.org/) and can send any URL to a JDownloader "device" via the [my.jdownloader.org](https://my.jdownloader.org/) API. There are plans to also integrate with [pyLoad](https://pyload.net/) soon.
 
 At the moment, `linky` uses the [Orion API](https://orionoid.com/) to find links which requires an app key. To acquire an app key, you must sign up for an Orion account and register for an app key via their registration form.
 
@@ -34,6 +34,9 @@ device_id = 12345678
 user_key = ABCDEFGHIJ123456
 app_key = KLMNOPQRS789012
 ```
+
+#### MyJDownloader
+Sign up for an account and sign in to it on your JDownloader client(s). You can find your client's device ID by clicking on it on the MyJDownloader website and reading the `deviceId=` URL parameter in your address bar.
 
 ### Searching for links
 Only OpenLoad links are returned at the moment, but there are plans to enable setting different sources in the future.
