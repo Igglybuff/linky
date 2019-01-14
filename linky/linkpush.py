@@ -25,3 +25,4 @@ class LinkPusher:
 
     def push_to_pyload(self, links):
         print('ERROR: pyLoad is not supported yet.')
+        exit(1)

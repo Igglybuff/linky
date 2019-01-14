@@ -3,6 +3,7 @@ from os.path import expanduser
 from .linkpush import LinkPusher
 from .config import ConfigParser
 from .indexsearch import IndexerSearcher
+from .statuscheck import StatusChecker
 
 
 @click.group()
@@ -42,3 +43,19 @@ def search(ctx, indexers, query):
     indexer = parser.get_indexers(indexers)
     searcher = IndexerSearcher(config)
     searcher.search(query, indexer)
+
+
+@linky.command()
+@click.option('-d', '--downloader', 'downloader', envvar='LINKY_DOWNLOADER', default=None,
+              help='The name of the download manager you want to use from your configuration file.')
+@click.option('-l', '--links', 'links', envvar='LINKY_LINKS', default=None,
+              help='URLs to files you have sent to your download manager.')
+@click.option('-a', '--all', 'all_items', default=None,
+              help='Get the status for all items in your download manager\' queue.')
+@click.pass_context
+def status(ctx, downloader, links, all_items):
+    parser = ConfigParser(ctx.obj['CONFIG'])
+    config = parser.get_config_dict()
+    download_client = parser.get_client(downloader)
+    status_checker = StatusChecker(config, download_client)
+    status = status_checker.get_status(links, all_items)
