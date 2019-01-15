@@ -54,19 +54,20 @@ class Pyload:
 
     def send_to_pyload(self):
         session = self.connect()
-        info(self.silence, 'Sending URL to pyLoad...')
-        package_name = self.l.rsplit('/')
+        info(self.silence, 'Sending URL(s) to pyLoad...')
 
         headers = {
             'Content-Type': 'application/json',
         }
 
-        resp = session.post(self.url + '/api/addPackage?name="' + package_name[-1] + '"&links=["' + self.l + '"]', headers=headers)
-        if resp.ok:
-            info(self.silence, 'Your link was sent to pyLoad successfully!')
-        else:
-            print('Response: ' + resp.text)
-            error(self.silence, 'Something went wrong sending your link to pyLoad.')
+        for link in self.l:
+            package_name = link.rsplit('/')
+            resp = session.post(self.url + '/api/addPackage?name="' + package_name[-1] + '"&links=["' + link + '"]', headers=headers)
+            if resp.ok:
+                info(self.silence, 'Sent your URL(s) to pyLoad successfully!')
+            else:
+                print('Response: ' + resp.text)
+                error(self.silence, 'Something went wrong sending link ' + link + ' to pyLoad.')
 
     def check_link_status(self, link=None):
         session = self.connect()

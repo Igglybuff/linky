@@ -39,9 +39,10 @@ class Jdownloader:
 
     def send_to_jdownloader(self):
         jd = self.connect()
-        info(self.silence, 'Sending URL to JDownloader...')
-        jd.get_device(device_id=self.device_id).linkgrabber.add_links([{"autostart": True, "links": self.l}])
-        info(self.silence, 'Your link was sent to JDownloader successfully!')
+        info(self.silence, 'Sending URL(s) to JDownloader...')
+        for link in self.l:
+            jd.get_device(device_id=self.device_id).linkgrabber.add_links([{"autostart": True, "links": link}])
+        info(self.silence, 'Sent your URL(s) to JDownloader successfully!')
 
     def check_link_status(self, link=None):
         jd = self.connect()

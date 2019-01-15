@@ -96,3 +96,8 @@ class ConfigParser:
         else:
             indexer = self.find_default_config('indexer')
             return indexer
+
+    @staticmethod
+    def split_list(comma_list):
+        normal_list = [x.strip() for x in comma_list.split(',')]
+        return normal_list

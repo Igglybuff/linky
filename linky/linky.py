@@ -31,6 +31,7 @@ def push(ctx, links, downloader):
     parser = ConfigParser(ctx.obj['CONFIG'], ctx.obj['SILENCE'])
     config = parser.get_config_dict()
     download_client = parser.get_client(downloader)
+    links = parser.split_list(links)
     pusher = LinkPusher(config, ctx.obj['SILENCE'])
     pusher.push_links(links, download_client)
 

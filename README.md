@@ -60,9 +60,9 @@ NB: `4537896` is the IMDB ID for [White Boy Rick (2018)](https://www.imdb.com/ti
 ### Planned features
 All subcommands:
 - [ ] Implement a more convenient way of searching and pushing in the same command
-- [ ] Implement taking a comma-separated list of URLs as input
+- [x] Implement taking a comma-separated list of URLs as input
 - [x] Implement the `--silence` feature to suppress informational log output
-- [ ] Implement pyLoad integration
+- [x] Implement pyLoad integration
 - [ ] Implement human-readable output as a default with `--json` as an optional alternative (and maybe `--pretty-print` too)
 
 `linky search`:

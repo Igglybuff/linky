@@ -17,7 +17,7 @@ class LinkPusher:
         elif str(downloader).lower() == 'pyload':
             self.push_to_pyload(links)
         else:
-            error(False, 'Something went wrong pushing the link to your download client.')
+            error(False, 'Something went wrong pushing the link(s) to your download client.')
 
     def push_to_jdownloader(self, links):
         jd = Jdownloader(links, self.config, self.silence)
