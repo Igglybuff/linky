@@ -61,18 +61,11 @@ class Pyload:
             'Content-Type': 'application/json',
         }
 
-        params = (
-            ('name', package_name[-1]),
-            ('links', self.l),
-        )
-
-        # payload_str = "&".join("%s=%s" % (k, v) for k, v in params.items())
-
-        resp = session.post(self.url + '/api/addPackage', headers=headers, params=params)
-        print('Response: ' + resp.text)
+        resp = session.post(self.url + '/api/addPackage?name="' + package_name[-1] + '"&links=["' + self.l + '"]', headers=headers)
         if resp.ok:
             info(self.silence, 'Your link was sent to pyLoad successfully!')
         else:
+            print('Response: ' + resp.text)
             error(self.silence, 'Something went wrong sending your link to pyLoad.')
 
     def check_link_status(self, link=None):
