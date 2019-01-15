@@ -45,12 +45,12 @@ class Pyload:
             'password': self.password
         }
 
-        resp = requests.post(self.url + '/login',  headers=headers, data=data)
-        cookies = '; '.join([x.name + '=' + x.value for x in resp.cookies])
-        return cookies
+        session = requests.session()
+        session.post(self.url + '/login',  headers=headers, data=data)
+        return session
 
     def send_to_pyload(self):
-        cookies = self.connect()
+        session = self.connect()
         info(self.silence, 'Sending URL to pyLoad...')
 
         headers = {
@@ -59,7 +59,6 @@ class Pyload:
             'Cache-Control': 'max-age=0',
             'Origin': self.url,
             'Upgrade-Insecure-Requests': '1',
-            'Cookie': cookies,
             'Content-Type': 'application/json',
         }
 
@@ -69,10 +68,11 @@ class Pyload:
         )
 
         info(self.silence, 'Sending URL to pyLoad...')
-        resp = requests.post(self.url + '/addPackage', headers=headers, params=params)
+        session.post(self.url + '/addPackage', headers=headers, params=params)
 
-    def check_link_status(self):
-        cookies = self.connect()
+    def check_link_status(self, link=None):
+        info(self.silence, 'Checking pyLoad queue...')
+        session = self.connect()
 
         headers = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
@@ -80,9 +80,9 @@ class Pyload:
             'Cache-Control': 'max-age=0',
             'Origin': self.url,
             'Upgrade-Insecure-Requests': '1',
-            'Cookie': cookies,
             'Content-Type': 'application/json',
         }
 
-        resp = requests.get(self.url + '/getQueue', headers=headers)
-        print(json.dumps(resp, indent=4, sort_keys=True))
+        resp = session.get(self.url + '/api/getQueue', headers=headers)
+        json_resp = json.loads(resp.text)
+        print(json.dumps(json_resp, indent=4, sort_keys=True))

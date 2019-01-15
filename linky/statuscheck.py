@@ -1,5 +1,6 @@
 from .myjdownloader import Jdownloader
 from .log import info, error, warning
+from .pyload import Pyload
 
 
 class StatusChecker:
@@ -22,4 +23,5 @@ class StatusChecker:
         jd.check_link_status(links)
 
     def get_pyload_status(self, links):
-        pass
+        pl = Pyload(links, self.config, self.silence)
+        pl.check_link_status(links)
