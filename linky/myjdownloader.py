@@ -1,12 +1,14 @@
 import myjdapi
 import json
+from .log import error, info, warning
 
 
 class Jdownloader:
 
-    def __init__(self, links, config):
+    def __init__(self, links, config, silence=False):
         self.l = links
         self.c = config
+        self.silence = silence
         self.email = self.c['client jdownloader']['email']
         self.password = self.c['client jdownloader']['password']
         self.device_id = self.c['client jdownloader']['device_id']
@@ -29,20 +31,20 @@ class Jdownloader:
         pass
 
     def connect(self):
-        print('INFO: Connecting to my.jdownloader.org...')
+        info(self.silence, 'Connecting to my.jdownloader.org...')
         jd = myjdapi.Myjdapi()
         jd.connect(self.email, self.password)
-        print('INFO: Connected!')
+        info(self.silence, 'Connected!')
         return jd
 
     def send_to_jdownloader(self):
         jd = self.connect()
-        print('INFO: Sending URL to JDownloader...')
+        info(self.silence, 'Sending URL to JDownloader...')
         jd.get_device(device_id=self.device_id).linkgrabber.add_links([{"autostart": True, "links": self.l}])
-        print('INFO: Your link was sent to JDownloader successfully!')
+        info(self.silence, 'Your link was sent to JDownloader successfully!')
 
     def check_link_status(self, link=None):
         jd = self.connect()
-        print('INFO: Fetching link(s) status...')
+        info(self.silence, 'Fetching link(s) status...')
         link_status = jd.get_device(device_id=self.device_id).downloads.query_packages()
         print(json.dumps(link_status, indent=4, sort_keys=True))

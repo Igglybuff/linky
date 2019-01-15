@@ -1,13 +1,15 @@
 from sys import exit
 from .myjdownloader import Jdownloader
+from .log import error, info, warning
 
 
 class LinkPusher:
 
     default_client = None
 
-    def __init__(self, config):
+    def __init__(self, config, silence=False):
         self.config = config
+        self.silence = silence
 
     def push_links(self, links, downloader):
         if str(downloader).lower() == 'jdownloader':
@@ -15,14 +17,12 @@ class LinkPusher:
         elif str(downloader).lower() == 'pyload':
             self.push_to_pyload(links)
         else:
-            print('ERROR: Something went wrong pushing the link to your download client.')
-            exit(1)
+            error(False, 'Something went wrong pushing the link to your download client.')
 
     def push_to_jdownloader(self, links):
-        jd = Jdownloader(links, self.config)
+        jd = Jdownloader(links, self.config, self.silence)
         jd.check_config()
         jd.send_to_jdownloader()
 
     def push_to_pyload(self, links):
-        print('ERROR: pyLoad is not supported yet.')
-        exit(1)
+        error(False, 'pyLoad is not supported yet.')

@@ -11,10 +11,13 @@ from .statuscheck import StatusChecker
               envvar='LINKY_CONFIG_PATH', required=True,
               default=expanduser("~") + '/.config/linky/linky.conf',
               show_default=True, help='The path to your Linky configuration file.')
+@click.option('-s', '--silence', 'silence', default=False,
+              help='Disable log/info output. NOTE: Error messages cannot be silenced.')
 @click.pass_context
-def linky(ctx, config):
+def linky(ctx, config, silence):
     ctx.obj = {
         'CONFIG': config,
+        'SILENCE': silence,
     }
 
 
@@ -25,10 +28,10 @@ def linky(ctx, config):
               help='The name of the download manager you want to use from your configuration file.')
 @click.pass_context
 def push(ctx, links, downloader):
-    parser = ConfigParser(ctx.obj['CONFIG'])
+    parser = ConfigParser(ctx.obj['CONFIG'], ctx.obj['SILENCE'])
     config = parser.get_config_dict()
     download_client = parser.get_client(downloader)
-    pusher = LinkPusher(config)
+    pusher = LinkPusher(config, ctx.obj['SILENCE'])
     pusher.push_links(links, download_client)
 
 
@@ -38,10 +41,10 @@ def push(ctx, links, downloader):
 @click.option('-q', '--query', 'query', required=True, help='Search terms you would like to query, e.g. "Deadpool"')
 @click.pass_context
 def search(ctx, indexers, query):
-    parser = ConfigParser(ctx.obj['CONFIG'])
+    parser = ConfigParser(ctx.obj['CONFIG'], ctx.obj['SILENCE'])
     config = parser.get_config_dict()
     indexer = parser.get_indexers(indexers)
-    searcher = IndexerSearcher(config)
+    searcher = IndexerSearcher(config, ctx.obj['SILENCE'])
     searcher.search(query, indexer)
 
 
@@ -52,12 +55,10 @@ def search(ctx, indexers, query):
               help='URLs to files you have sent to your download manager.')
 @click.option('-a', '--all', 'all_items', default=False,
               help='Get the status for all items in your download manager\' queue.')
-@click.option('-s', '--silence', 'silence', default=False,
-              help='Disable log/info output.')
 @click.pass_context
-def status(ctx, downloader, links, all_items, silence):
-    parser = ConfigParser(ctx.obj['CONFIG'])
+def status(ctx, downloader, links, all_items):
+    parser = ConfigParser(ctx.obj['CONFIG'], ctx.obj['SILENCE'])
     config = parser.get_config_dict()
     download_client = parser.get_client(downloader)
-    status_checker = StatusChecker(config, download_client, silence)
+    status_checker = StatusChecker(config, download_client, ctx.obj['SILENCE'])
     status = status_checker.get_status(links, all_items)

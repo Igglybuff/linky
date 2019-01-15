@@ -1,5 +1,5 @@
-from sys import exit
 from .myjdownloader import Jdownloader
+from .log import info, error, warning
 
 
 class StatusChecker:
@@ -15,8 +15,7 @@ class StatusChecker:
         elif str(self.download_client).lower() == 'pyload':
             self.get_pyload_status(links)
         else:
-            print('ERROR: Something went wrong checking the status of your link(s).')
-            exit(1)
+            error(self.silence, 'Something went wrong checking the status of your link(s).')
 
     def get_jdownloader_status(self, links):
         jd = Jdownloader(links, self.config)

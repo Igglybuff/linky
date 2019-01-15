@@ -2,12 +2,14 @@ from sys import exit
 from .fmovies import Fmovies
 from .cinebloom import Cinebloom
 from .orion import Orion
+from .log import warning, info, error
 
 
 class IndexerSearcher:
 
-    def __init__(self, config):
+    def __init__(self, config, silence=False):
         self.config = config
+        self.silence = silence
 
     def search(self, query, indexers):
         # if indexers is a comma-separated list, turn it
@@ -19,8 +21,7 @@ class IndexerSearcher:
         elif indexers.lower() == 'orion':
             self.search_orion(query)
         else:
-            print('ERROR: Something went wrong searching for "' + query + '"')
-            exit(1)
+            error(False, 'Something went wrong searching for "' + query + '"')
 
     def search_fmovies(self, query):
         fm = Fmovies(self.config)

@@ -1,12 +1,13 @@
 import configparser
-from sys import exit
 from os.path import abspath
+from .log import info, error, warning
 
 
 class ConfigParser:
 
-    def __init__(self, config):
+    def __init__(self, config, silence):
         self.c = abspath(config)
+        self.silence = silence
         self.dict = {}
         self.supported_items = {
             'client': ['jdownloader', 'pyload'],
@@ -45,8 +46,7 @@ class ConfigParser:
             if str(downloader).lower() in self.supported_items['client']:
                 return downloader
             else:
-                print('ERROR: Provided download client is not supported.')
-                exit(1)
+                error(False, 'Provided download client is not supported.')
         else:
             download_client = self.find_default_config('client')
             return download_client
@@ -57,38 +57,34 @@ class ConfigParser:
         non_defaults = 0
 
         if len(sections) == 1:
-            print('WARNING: Skipping searching for defaults and using ' + str(sections[0]).capitalize() + ' as your ' +
-                  section_type + ' since it is the only one configured.')
+            warning(self.silence, 'Skipping searching for defaults and using ' + str(sections[0]).capitalize() +
+                    ' as your ' + section_type + ' since it is the only one configured.')
             default = str(sections[0]).lower()
             return default
         elif len(sections) == 0:
-            print('ERROR: There were no ' + section_type + 's specified in ' + self.c)
-            exit(1)
+            error(False, 'There were no ' + section_type + 's specified in ' + self.c)
 
         for section in sections:
             if section in self.supported_items[section_type]:
-                print('INFO: ' + 'Found ' + section + ' in ' + self.c)
+                info(self.silence, 'Found ' + section + ' in ' + self.c)
                 if config[section]['default']:
                     default_flag = str(config[section]['default']).lower()
                     if default_flag == 'true':
-                        print('INFO: ' + section + ' is set as the default ' + section_type + '!')
+                        info(self.silence, section + ' is set as the default ' + section_type + '!')
                         default = section
                         return default
                     else:
-                        print('ERROR: Found a "default = " line in ' + self.c + ' but it is not set to "true".')
-                        exit(1)
+                        error(False, 'Found a "default = " line in ' + self.c + ' but it is not set to "true".')
                 else:
                     non_defaults += 1
-                    print('WARNING: Found "' + section + '", a supported ' + section_type +
-                          ', but it is not set to default. Looking for additional ' + section_type + 's...')
+                    warning(self.silence, 'Found "' + section + '", a supported ' + section_type +
+                            ', but it is not set to default. Looking for additional ' + section_type + 's...')
             else:
                 if non_defaults > 1:
-                    print('ERROR: At least one ' + section_type +
+                    error(False, 'At least one ' + section_type +
                           ' was found in your configuration, but no default was set!')
-                    exit(1)
                 else:
-                    print('ERROR: Something went horribly wrong when reading ' + self.c + '!')
-                    exit(1)
+                    error(False, 'Something went horribly wrong when reading ' + self.c + '!')
 
     def get_indexers(self, indexers):
         if indexers:
@@ -96,8 +92,7 @@ class ConfigParser:
             if indexers.lower() in self.supported_items['indexer']:
                 return indexers
             else:
-                print('ERROR: Provided indexer is not supported.')
-                exit(1)
+                error(False, 'Provided indexer is not supported.')
         else:
             indexer = self.find_default_config('indexer')
             return indexer
