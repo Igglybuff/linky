@@ -39,9 +39,14 @@ def push(ctx, links, downloader):
 @linky.command()
 @click.option('-i', '--indexer', 'indexers', envvar='LINKY_INDEXERS',
               required=False, default=None, help='One or more indexers to search.')
-@click.option('-q', '--query', 'query', required=True, help='Search terms you would like to query, e.g. "Deadpool"')
+@click.option('-r', '--results', 'results', required=False, default=1,
+              help='Number of results to return as a comma-separated list.')
+@click.option('-h', '--hosters', 'hosters', required=False, help='Comma-separated list of 1-click-hosters to query.')
+@click.option('-q', '--query-type', 'query_type', required=False, default='keyword',
+              help='Set a different query type instead of doing a keyword search (e.g. "imdb" to search by IMDB ID).')
+@click.argument('query')
 @click.pass_context
-def search(ctx, indexers, query):
+def search(ctx, indexers, query, results, hosters, query_type):
     parser = ConfigParser(ctx.obj['CONFIG'], ctx.obj['SILENCE'])
     config = parser.get_config_dict()
     indexer = parser.get_indexers(indexers)

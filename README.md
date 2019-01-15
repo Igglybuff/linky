@@ -72,4 +72,5 @@ All subcommands:
 - [ ] Implement a `--quality` option to set the preferred video quality to return
 
 `linky status`:
-- [ ] Implement `--all` option to output a report for everything in your download manager
+- [ ] Implement `--all` option to output a report for everything in your download manager (this is the default now)
+- [ ] Implement a `--name` option to get the status of a specific package/download
