@@ -61,4 +61,4 @@ def status(ctx, downloader, links, all_items):
     config = parser.get_config_dict()
     download_client = parser.get_client(downloader)
     status_checker = StatusChecker(config, download_client, ctx.obj['SILENCE'])
-    status = status_checker.get_status(links, all_items)
+    status_checker.get_status(links, all_items)
