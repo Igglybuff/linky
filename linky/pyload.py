@@ -22,6 +22,9 @@ class Pyload:
 
         self.url = protocol + '://' + self.hostname + ':' + self.port
 
+    def check_config(self):
+        pass
+
     def connect(self):
         info(self.silence, 'Connecting to PyLoad at ' + self.url)
 
@@ -52,27 +55,29 @@ class Pyload:
     def send_to_pyload(self):
         session = self.connect()
         info(self.silence, 'Sending URL to pyLoad...')
+        package_name = self.l.rsplit('/')
 
         headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
-            'Connection': 'keep-alive',
-            'Cache-Control': 'max-age=0',
-            'Origin': self.url,
-            'Upgrade-Insecure-Requests': '1',
             'Content-Type': 'application/json',
         }
 
         params = (
-            ('name', self.l),
+            ('name', package_name[-1]),
             ('links', self.l),
         )
 
-        info(self.silence, 'Sending URL to pyLoad...')
-        session.post(self.url + '/addPackage', headers=headers, params=params)
+        # payload_str = "&".join("%s=%s" % (k, v) for k, v in params.items())
+
+        resp = session.post(self.url + '/api/addPackage', headers=headers, params=params)
+        print('Response: ' + resp.text)
+        if resp.ok:
+            info(self.silence, 'Your link was sent to pyLoad successfully!')
+        else:
+            error(self.silence, 'Something went wrong sending your link to pyLoad.')
 
     def check_link_status(self, link=None):
-        info(self.silence, 'Checking pyLoad queue...')
         session = self.connect()
+        info(self.silence, 'Checking pyLoad queue...')
 
         headers = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',

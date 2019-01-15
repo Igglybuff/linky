@@ -1,5 +1,6 @@
 from .myjdownloader import Jdownloader
 from .log import error, info, warning
+from .pyload import Pyload
 
 
 class LinkPusher:
@@ -24,4 +25,6 @@ class LinkPusher:
         jd.send_to_jdownloader()
 
     def push_to_pyload(self, links):
-        error(False, 'pyLoad is not supported yet.')
+        pl = Pyload(links, self.config, self.silence)
+        pl.check_config()
+        pl.send_to_pyload()
