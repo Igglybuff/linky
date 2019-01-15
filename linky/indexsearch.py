@@ -1,4 +1,3 @@
-from sys import exit
 from .fmovies import Fmovies
 from .cinebloom import Cinebloom
 from .orion import Orion

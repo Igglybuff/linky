@@ -11,7 +11,7 @@ from .statuscheck import StatusChecker
               envvar='LINKY_CONFIG_PATH', required=True,
               default=expanduser("~") + '/.config/linky/linky.conf',
               show_default=True, help='The path to your Linky configuration file.')
-@click.option('-s', '--silence', 'silence', default=False,
+@click.option('-s', '--silence', is_flag=True, default=False,
               help='Disable log/info output. NOTE: Error messages cannot be silenced.')
 @click.pass_context
 def linky(ctx, config, silence):

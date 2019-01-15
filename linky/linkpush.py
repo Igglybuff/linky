@@ -1,4 +1,3 @@
-from sys import exit
 from .myjdownloader import Jdownloader
 from .log import error, info, warning
 

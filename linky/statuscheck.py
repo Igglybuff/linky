@@ -18,7 +18,7 @@ class StatusChecker:
             error(self.silence, 'Something went wrong checking the status of your link(s).')
 
     def get_jdownloader_status(self, links):
-        jd = Jdownloader(links, self.config)
+        jd = Jdownloader(links, self.config, self.silence)
         jd.check_link_status(links)
 
     def get_pyload_status(self, links):
