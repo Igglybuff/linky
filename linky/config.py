@@ -57,34 +57,33 @@ class ConfigParser:
         non_defaults = 0
 
         if len(sections) == 1:
-            warning(self.silence, 'Skipping searching for defaults and using ' + str(sections[0]).capitalize() +
-                    ' as your ' + section_type + ' since it is the only one configured.')
+            warning(self.silence, 'Skipping searching for defaults and using {} as your {} since it is the only one configured.'.format(str(sections[0]).capitalize(), section_type))
             default = str(sections[0]).lower()
             return default
         elif len(sections) == 0:
-            error(False, 'There were no ' + section_type + 's specified in ' + self.c)
+            error(False, 'There were no {}s specified in {}'.format(section_type, self.c))
 
         for section in sections:
             if section in self.supported_items[section_type]:
-                info(self.silence, 'Found ' + section + ' in ' + self.c)
-                if config[section]['default']:
+                info(self.silence, 'Found {} in {}'.format(section, self.c))
+                if 'default' in config['client {}'.format(section)]:
                     default_flag = str(config[section]['default']).lower()
                     if default_flag == 'true':
-                        info(self.silence, section + ' is set as the default ' + section_type + '!')
+                        info(self.silence, '"{}" is set as the default {}!'.format(section, section_type))
                         default = section
                         return default
                     else:
-                        error(False, 'Found a "default = " line in ' + self.c + ' but it is not set to "true".')
+                        error(False, 'Found a "default = " line in {} but it is not set to "true".'.format(self.c))
                 else:
                     non_defaults += 1
-                    warning(self.silence, 'Found "' + section + '", a supported ' + section_type +
-                            ', but it is not set to default. Looking for additional ' + section_type + 's...')
+                    warning(self.silence, 'Found "{}", a supported {}, but it is not set to default. Looking for additional {}s...'.format(section, section_type, section_type))
             else:
                 if non_defaults > 1:
-                    error(False, 'At least one ' + section_type +
-                          ' was found in your configuration, but no default was set!')
+                    error(False, 'At least one {} was found in your configuration, but no default was set!'.format(section_type))
                 else:
-                    error(False, 'Something went horribly wrong when reading ' + self.c + '!')
+                    error(False, 'Something went horribly wrong when reading {} !'.format(self.c))
+        
+        error(False, 'Could not find any supported {}s.'.format(section_type))
 
     def get_indexers(self, indexers):
         if indexers:

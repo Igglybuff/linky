@@ -41,7 +41,7 @@ def push(ctx, links, downloader):
               required=False, default=None, help='Comma-separated list of indexers to search.')
 @click.option('-r', '--results', 'results', required=False, default=1,
               help='Number of results to return as a comma-separated list.')
-@click.option('-h', '--hosters', 'hosters', required=False, default='openload',
+@click.option('-w', '--hosters', 'hosters', required=False, default='openload',
               help='Comma-separated list of 1-click-hosters to query.')
 @click.option('-t', '--query-type', 'query_type', required=False, default='keyword',
               help='Set a different query type instead of doing a keyword search (e.g. "imdb" to search by IMDB ID).')

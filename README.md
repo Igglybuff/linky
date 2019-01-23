@@ -1,8 +1,8 @@
 # linky
 
-`linky` is a work-in-progress command-line tool which can search the internet for movies and TV shows hosted on 1-click hosting websites like OpenLoad, Streamango, RapidVideo, and more (full list of supported hosters coming soon).
+`linky` is a work-in-progress command-line tool which can search the internet for movies and TV shows hosted on 1-click hosting websites like OpenLoad (full list of supported hosters coming soon).
 
-`linky` integrates tightly with [JDownloader](http://jdownloader.org/) and can send any URL to a JDownloader "device" via the [my.jdownloader.org](https://my.jdownloader.org/) API. There are plans to also integrate with [pyLoad](https://pyload.net/) soon.
+`linky` integrates tightly with [JDownloader](http://jdownloader.org/) and can send any URL (or multiple URLs as a comma-separated list) to a JDownloader "device" via the [my.jdownloader.org](https://my.jdownloader.org/) API or to a [pyLoad](https://pyload.net/) instance.
 
 At the moment, `linky` uses the [Orion API](https://orionoid.com/) to find links which requires an app key. To acquire an app key, you must sign up for an Orion account and register for an app key via their registration form.
 
@@ -22,13 +22,21 @@ linky --help
 
 ## Usage
 ### Configuration
-By default, `linky` looks for `~/.config/linky/linky.conf` for configuration. For example, to configure JDownloader and Orion:
+By default, `linky` looks for `~/.config/linky/linky.conf` for configuration. For example, to configure JDownloader, pyLoad, and Orion:
 
 ```
 [client jdownloader]
+default = true
 email = foo@bar.com
 password = foobar123
 device_id = 12345678
+
+[client pyload]
+hostname = localhost
+port = 8000
+username = pyload
+password = pyload
+ssl = false
 
 [indexer orion]
 user_key = ABCDEFGHIJ123456
@@ -41,9 +49,17 @@ Sign up for an account and sign in to it on your JDownloader client(s). You can 
 ### Searching for links
 Only OpenLoad links are returned at the moment, but there are plans to enable setting different sources in the future.
 
-`linky search --indexer orion --query "4537896"`
+#### Basic keyword search
 
-NB: `4537896` is the IMDB ID for [White Boy Rick (2018)](https://www.imdb.com/title/tt4537896/?ref_=fn_al_tt_1).
+`linky search --hosters openload --indexer orion --media-type movie "White Boy Rick"`
+
+#### IMDB ID search with 10 results
+
+`linky search --hosters openload --indexer orion --query-type imdb --media-type movie --results 10 "5519340"`
+
+#### TMDB ID search for 720p only
+
+`linky search -w openload -i orion -t tmdb -m movie -q hd1080 -r 6 "424694"`
 
 ### Sending links to JDownloader
 
@@ -51,11 +67,11 @@ NB: `4537896` is the IMDB ID for [White Boy Rick (2018)](https://www.imdb.com/ti
 
 ### Searching and sending a link to JDownloader
 
-`linky push --link $(linky search --indexer orion --query "White Boy Rick") --downloader jdownloader`
+`linky push --link $(linky search --indexer orion "White Boy Rick") --downloader jdownloader`
 
 ### Checking the status of your downloads
 
-`linky status`
+`linky status --downloader jdownloader`
 
 ### Planned features
 All subcommands:
