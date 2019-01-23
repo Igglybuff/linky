@@ -66,10 +66,10 @@ All subcommands:
 - [ ] Implement human-readable output as a default with `--json` as an optional alternative (and maybe `--pretty-print` too)
 
 `linky search`:
-- [ ] Implement a `--results` option to print the first n URLs returned from Orion API as a comma-separated list
-- [ ] Implement a `--hosters` option to set the 1-click-host source
-- [ ] Implement keyword search by default, with ability to override with `--imdb`, `--tvdb`, or `--tmdb` instead
-- [ ] Implement a `--quality` option to set the preferred video quality to return
+- [x] Implement a `--results` option to print the first n URLs returned from Orion API as a comma-separated list
+- [x] Implement a `--hosters` option to set the 1-click-host source
+- [x] Implement a `--query-type` option to override the default keyword search, e.g. to search by IMDB/TVDB/TMDB ID.
+- [x] Implement a `--quality` option to set the preferred video quality to return
 
 `linky status`:
 - [ ] Implement `--all` option to output a report for everything in your download manager (this is the default now)

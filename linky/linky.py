@@ -38,20 +38,25 @@ def push(ctx, links, downloader):
 
 @linky.command()
 @click.option('-i', '--indexer', 'indexers', envvar='LINKY_INDEXERS',
-              required=False, default=None, help='One or more indexers to search.')
+              required=False, default=None, help='Comma-separated list of indexers to search.')
 @click.option('-r', '--results', 'results', required=False, default=1,
               help='Number of results to return as a comma-separated list.')
-@click.option('-h', '--hosters', 'hosters', required=False, help='Comma-separated list of 1-click-hosters to query.')
-@click.option('-q', '--query-type', 'query_type', required=False, default='keyword',
+@click.option('-h', '--hosters', 'hosters', required=False, default='openload',
+              help='Comma-separated list of 1-click-hosters to query.')
+@click.option('-t', '--query-type', 'query_type', required=False, default='keyword',
               help='Set a different query type instead of doing a keyword search (e.g. "imdb" to search by IMDB ID).')
+@click.option('-m', '--media-type', 'media_type', default='movie', required=True,
+              help='The type of media you want (i.e. "TV" or "Movie").')
+@click.option('-q', '--quality', 'quality', required=False, default='hd1080',
+              help='Desired video quality of links to return (e.g. "hd1080").')
 @click.argument('query')
 @click.pass_context
-def search(ctx, indexers, query, results, hosters, query_type):
+def search(ctx, indexers, query, results, hosters, query_type, media_type, quality):
     parser = ConfigParser(ctx.obj['CONFIG'], ctx.obj['SILENCE'])
     config = parser.get_config_dict()
     indexer = parser.get_indexers(indexers)
     searcher = IndexerSearcher(config, ctx.obj['SILENCE'])
-    searcher.search(query, indexer)
+    searcher.search(query, indexer, media_type, hosters, results, query_type, quality)
 
 
 @linky.command()

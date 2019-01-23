@@ -1,5 +1,4 @@
 from .fmovies import Fmovies
-from .cinebloom import Cinebloom
 from .orion import Orion
 from .log import warning, info, error
 
@@ -10,15 +9,24 @@ class IndexerSearcher:
         self.config = config
         self.silence = silence
 
-    def search(self, query, indexers):
-        # if indexers is a comma-separated list, turn it
+    def search(self, query, indexers, media_type, hosters, results, query_type, quality):
+        # TODO: if indexers is a comma-separated list, turn it
         # into a list and search all of them
+        if query_type.lower() == 'imdb':
+            search_id = 'idimdb'
+        elif query_type.lower() == 'tvdb':
+            search_id = 'idtvdb'
+        elif query_type.lower() == 'tmdb':
+            search_id = 'idtmdb'
+        elif query_type.lower() == 'keyword':
+            search_id = 'query'
+        else:
+            error(False, 'Invalid query type "{}" specified.'.format(query_type))
+
         if indexers.lower() == 'fmovies':
             self.search_fmovies(query)
-        elif indexers.lower() == 'cinebloom':
-            self.search_cinebloom(query)
         elif indexers.lower() == 'orion':
-            self.search_orion(query)
+            self.search_orion(query, media_type, hosters, results, search_id, quality)
         else:
             error(False, 'Something went wrong searching for "' + query + '"')
 
@@ -27,12 +35,7 @@ class IndexerSearcher:
         url = fm.search(query)
         print(url)
 
-    def search_cinebloom(self, query):
-        cb = Cinebloom(self.config)
-        url = cb.search(query)
-        print(url)
-
-    def search_orion(self, query):
+    def search_orion(self, query, media_type, hosters, results, query_type, quality):
         orion = Orion(self.config)
-        url = orion.search(query, 'movie')
+        url = orion.search(query, media_type, hosters, results, query_type, quality)
         print(url)

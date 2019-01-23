@@ -7,15 +7,7 @@ class Orion:
     def __init__(self, config):
         self.config = config
 
-    def get_query(self):
-        """
-            Figure out how to form API request by
-            checking whether user does a keyword
-            search or uses an ID.
-        """
-        pass
-
-    def search(self, query, media_type):
+    def search(self, query, media_type, hosters, results, search_id, quality):
         user_key = self.config['indexer orion']['user_key']
         app_key = self.config['indexer orion']['app_key']
 
@@ -28,15 +20,22 @@ class Orion:
             ('keyapp', app_key),
             ('mode', 'stream'),
             ('action', 'retrieve'),
-            ('type', media_type),
-            ('idimdb', query),
-            ('limitcount', 1),
+            ('type', media_type.lower()),
+            (search_id, query),
+            ('limitcount', results),
             ('streamtype', 'hoster'),
-            ('streamhoster', 'openload'),
-            ('videoquality', 'hd1080'),
+            ('streamhoster', hosters.lower()),
+            ('videoquality', quality.lower()),
         )
 
         page = requests.get('https://api.orionoid.com', headers=headers, params=params)
-        url = json.loads(page.text)['data']['streams'][0]['stream']['link']
 
-        return url
+        # print(json.loads(page.text))
+
+        links = []
+        for link in json.loads(page.text)['data']['streams']:
+            links.append(link['stream']['link'])
+
+        urls = ",".join(links)
+
+        return urls
