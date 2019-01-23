@@ -30,8 +30,6 @@ class Orion:
 
         page = requests.get('https://api.orionoid.com', headers=headers, params=params)
 
-        # print(json.loads(page.text))
-
         links = []
         for link in json.loads(page.text)['data']['streams']:
             links.append(link['stream']['link'])

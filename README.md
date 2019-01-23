@@ -87,6 +87,11 @@ All subcommands:
 - [x] Implement a `--query-type` option to override the default keyword search, e.g. to search by IMDB/TVDB/TMDB ID.
 - [x] Implement a `--quality` option to set the preferred video quality to return
 
+`linky push`:
+- [ ] Implement a way to print info about pushed links including package ID and file name
+
 `linky status`:
 - [ ] Implement `--all` option to output a report for everything in your download manager (this is the default now)
-- [ ] Implement a `--name` option to get the status of a specific package/download
+- [ ] Implement a main argument to get the status of a specific package/download by file name
+- [ ] Implement an `--id` option to get the status of a package by ID
+- [ ] Implement human-readable output to print % completed, total size, download speed, and name

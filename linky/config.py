@@ -11,7 +11,7 @@ class ConfigParser:
         self.dict = {}
         self.supported_items = {
             'client': ['jdownloader', 'pyload'],
-            'indexer': ['fmovies', 'orion', 'cinebloom'],
+            'indexer': ['fmovies', 'orion'],
         }
 
     def get_config_dict(self):
@@ -82,7 +82,7 @@ class ConfigParser:
                     error(False, 'At least one {} was found in your configuration, but no default was set!'.format(section_type))
                 else:
                     error(False, 'Something went horribly wrong when reading {} !'.format(self.c))
-        
+
         error(False, 'Could not find any supported {}s.'.format(section_type))
 
     def get_indexers(self, indexers):
