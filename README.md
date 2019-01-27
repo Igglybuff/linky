@@ -86,6 +86,7 @@ All subcommands:
 - [x] Implement a `--hosters` option to set the 1-click-host source
 - [x] Implement a `--query-type` option to override the default keyword search, e.g. to search by IMDB/TVDB/TMDB ID.
 - [x] Implement a `--quality` option to set the preferred video quality to return
+- [ ] Implement an `--age` option to set the maximum number of days since the link was added to the indexer 
 
 `linky push`:
 - [ ] Implement a way to print info about pushed links including package ID and file name
